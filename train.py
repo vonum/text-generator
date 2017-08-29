@@ -1,3 +1,7 @@
+import numpy as np
+
+from keras.utils import np_utils
+
 # load ascii text and covert to lowercase
 filename = "alice-in-wonderland.txt"
 raw_text = open(filename).read()
@@ -27,3 +31,12 @@ for i in range(0, n_chars - seq_length, 1):
 
 n_patterns = len(dataX)
 print "Total Patterns: ", n_patterns
+
+# reshape inputs for neural network
+# reshape X to be [samples, time steps, features]
+X = np.reshape(dataX, (n_patterns, seq_length, 1))
+print X[0]
+# normalize
+X = X / float(n_vocab)
+# one hot encode the output variable
+y = np_utils.to_categorical(dataY)
