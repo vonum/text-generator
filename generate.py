@@ -1,4 +1,5 @@
 import numpy as np
+import argparse
 import sys
 
 from keras.models import Sequential
@@ -10,8 +11,16 @@ from keras.callbacks import ModelCheckpoint
 from prep import prep_data
 from model import create_lstm_model
 
-seq_length = 100
-raw_text, chars, char_to_int, X, y = prep_data('alice-in-wonderland.txt', seq_length)
+ap = argparse.ArgumentParser()
+ap.add_argument('--file_path', type=str, default='alice-in-wonderland.txt')
+ap.add_argument('--seq_length', type=int, default=100)
+
+args = vars(ap.parse_args())
+
+FILE_PATH = args['file_path']
+SEQ_LENGTH = args['seq_length']
+
+raw_text, chars, char_to_int, X, y = prep_data('alice-in-wonderland.txt', SEQ_LENGTH)
 
 n_chars = len(raw_text)
 n_vocab = len(chars)
