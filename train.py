@@ -7,6 +7,7 @@ from keras.layers import LSTM
 from keras.callbacks import ModelCheckpoint
 
 from prep import prep_data
+from model import create_lstm_model
 
 seq_length = 100
 raw_text, chars, char_to_int, X, y = prep_data('alice-in-wonderland.txt', seq_length)
@@ -19,15 +20,10 @@ print 'Total Vocab: ', n_vocab
 n_patterns = len(X)
 print 'Total Patterns: ', n_patterns
 
-# define the LSTM model
+print X.shape
+print y.shape
 
-model = Sequential()
-model.add(LSTM(256, input_shape=(X.shape[1], X.shape[2]), return_sequences=True))
-model.add(Dropout(0.2))
-model.add(LSTM(256))
-model.add(Dropout(0.2))
-model.add(Dense(y.shape[1], activation='softmax'))
-model.compile(loss='categorical_crossentropy', optimizer='adam')
+model = create_lstm_model(X.shape[1], X.shape[2], y.shape[1])
 
 # define the checkpoint
 filepath='/output/weights-improvement-{epoch:02d}-{loss:.4f}.hdf5'
