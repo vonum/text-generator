@@ -21,15 +21,7 @@ def reshape(dataX, dataY, seq_length, n_vocab):
 
   return X, y
 
-def prep_data(filename, seq_length):
-  # create mapping of unique chars to integers
-  raw_text = load_text(filename)
-  n_chars = len(raw_text)
-
-  chars = sorted(list(set(raw_text))) # all unique chars
-  n_vocab = len(chars)
-  char_to_int = dict((c, i) for i, c in enumerate(chars))
-
+def inputs_and_outputs(raw_text, char_to_int, n_chars, seq_length):
   dataX = []
   dataY = []
 
@@ -40,6 +32,20 @@ def prep_data(filename, seq_length):
     seq_out = raw_text[i + seq_length]
     dataX.append([char_to_int[char] for char in seq_in])
     dataY.append(char_to_int[seq_out])
+
+  return dataX, dataY
+
+
+def prep_data(filename, seq_length):
+  # create mapping of unique chars to integers
+  raw_text = load_text(filename)
+  n_chars = len(raw_text)
+
+  chars = sorted(list(set(raw_text))) # all unique chars
+  n_vocab = len(chars)
+  char_to_int = dict((c, i) for i, c in enumerate(chars))
+
+  dataX, dataY = inputs_and_outputs(raw_text, char_to_int, n_chars, seq_length)
 
   X, y = reshape(dataX, dataY, seq_length, n_vocab)
 

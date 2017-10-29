@@ -8,7 +8,7 @@ from keras.layers import Dropout
 from keras.layers import LSTM
 from keras.callbacks import ModelCheckpoint
 
-from prep import prep_data
+from prep import prep_data, inputs_and_outputs
 from model import create_lstm_model
 
 ap = argparse.ArgumentParser()
@@ -32,6 +32,8 @@ model.compile(loss='categorical_crossentropy', optimizer='adam')
 
 # define oposite mapping
 int_to_char = dict((i, c) for i, c in enumerate(chars))
+
+dataX, _ = inputs_and_outputs(raw_text, char_to_int, n_chars, SEQ_LENGTH)
 
 # pick a random seed
 start = np.random.randint(0, len(dataX)-1)
